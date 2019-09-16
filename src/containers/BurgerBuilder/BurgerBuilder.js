@@ -44,8 +44,11 @@ const BurgerBuilder = () => {
     return (
         <>
             <Burger ingredients={ingredients}/>
-            <p>Price: {price}€</p>
-            <BuildControls ingredients={ingredients} ingredientAdded={addIngredientHandler} ingredientRemove={removeIngredientHandler}/>
+            <BuildControls
+                price={price}
+                ingredients={ingredients}
+                ingredientAdded={addIngredientHandler}
+                ingredientRemove={removeIngredientHandler}/>
         </>
     );
 };
