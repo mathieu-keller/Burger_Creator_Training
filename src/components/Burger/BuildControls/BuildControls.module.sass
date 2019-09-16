@@ -1,3 +1,8 @@
+$order-color: #966909
+$button-background-color: #DAD735
+$button-disable-background-color: #C7C6C6
+$button-disable-color: #888888
+$button-hover-background-color: #A0DB41
 .BuildControls
   width: 100%
   background-color: #bc581e
@@ -7,3 +12,37 @@
   box-shadow: 0 2px 1px #ccc
   margin: auto
   padding: 10px 0
+
+.OrderButton
+  background-color: $button-background-color
+  outline: none
+  cursor: pointer
+  border: 1px solid $order-color
+  color: $order-color
+  font-family: inherit
+  font-size: 1.2em
+  padding: 15px 30px
+  box-shadow: 2px 2px 2px $order-color
+
+.OrderButton:hover, .OrderButton:active
+  background-color: $button-hover-background-color
+  border: 1px solid $order-color
+  color: $order-color
+
+.OrderButton:disabled
+  background-color: $button-disable-background-color
+  cursor: not-allowed
+  border: 1px solid #ccc
+  color: $button-disable-color
+
+.OrderButton:not(:disabled)
+  animation: enable 0.3s linear
+
+@keyframes enable
+  0%
+    transform: scale(1)
+  60%
+    transform: scale(1.1)
+  100%
+    transform: scale(1)
+

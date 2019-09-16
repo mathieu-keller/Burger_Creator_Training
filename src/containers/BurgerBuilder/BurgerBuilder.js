@@ -13,6 +13,14 @@ const BurgerBuilder = () => {
     const basePrice = 4;
     const [ingredients, setIngredients] = useState({});
     const [price, setPrice] = useState(basePrice);
+    const [purchasable, setPurchasable] = useState(false);
+
+    const updatePurchaseState = newIngredients => {
+        const ingredientsCount = Object.keys(newIngredients)
+            .map(key => newIngredients[key])
+            .reduce((a, b) => a + b, 0);
+        setPurchasable(ingredientsCount > 0);
+    };
 
     const addIngredientHandler = type => {
         const oldCount = ingredients[type] ? ingredients[type] : 0;
@@ -20,6 +28,7 @@ const BurgerBuilder = () => {
         stateCopy[type] = oldCount + 1;
         setIngredients(stateCopy);
         setPrice(price + INGREDIENT_PRICES[type]);
+        updatePurchaseState(stateCopy);
     };
 
     const removeIngredientHandler = type => {
@@ -39,6 +48,7 @@ const BurgerBuilder = () => {
             }
             setPrice(newPrice);
         }
+        updatePurchaseState(stateCopy);
     };
 
     return (
@@ -48,7 +58,9 @@ const BurgerBuilder = () => {
                 price={price}
                 ingredients={ingredients}
                 ingredientAdded={addIngredientHandler}
-                ingredientRemove={removeIngredientHandler}/>
+                ingredientRemove={removeIngredientHandler}
+                purchasable={purchasable}
+            />
         </>
     );
 };
