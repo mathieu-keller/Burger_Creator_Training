@@ -1,10 +1,11 @@
 import React from 'react';
 import classes from './BuildControl.module.sass'
-const buildControl = ({label}) => (
+
+const buildControl = ({label, added, remove, disable}) => (
     <div className={classes.BuildControl}>
         <div className={classes.Label}>{label}</div>
-        <button className={classes.Less}>Less</button>
-        <button className={classes.More}>More</button>
+        <button disabled={disable} onClick={remove} className={classes.Less}>Less</button>
+        <button onClick={added} className={classes.More}>More</button>
     </div>
 );
 
