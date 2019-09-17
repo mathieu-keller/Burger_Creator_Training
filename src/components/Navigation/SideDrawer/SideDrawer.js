@@ -15,7 +15,7 @@ const sideDrawer = ({open, close}) => {
         <>
             <Backdrop show={open} clicked={close}/>
             <div className={attachedClasses.join(' ')}>
-                <Logo height='11%'/>
+                <Logo height='5%'/>
                 <nav>
                     <NavigationItems/>
                 </nav>
