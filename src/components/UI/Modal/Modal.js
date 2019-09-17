@@ -2,7 +2,7 @@ import React from 'react';
 import classes from './Modal.module.sass';
 import Backdrop from '../Backdrop/Backdrop'
 
-const modal = ({children, show, modalClosed}) => (
+const modal = React.memo(({children, show, modalClosed}) => (
     <>
         <Backdrop show={show} clicked={modalClosed}/>
         <div
@@ -15,6 +15,6 @@ const modal = ({children, show, modalClosed}) => (
             {children}
         </div>
     </>
-);
+), (prevProps, nextProps) => prevProps.show === nextProps.show);
 
 export default modal;
