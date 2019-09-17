@@ -8,6 +8,6 @@ const App = () => {
             <BurgerBuilder/>
         </Layout>
     );
-}
+};
 
 export default App;
