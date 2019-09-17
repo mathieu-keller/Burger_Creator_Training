@@ -57,7 +57,10 @@ const BurgerBuilder = () => {
     return (
         <>
             <Modal show={purchasing} modalClosed={() => setPurchasing(false)}>
-                <OrderSummary ingredients={ingredients} price={price}/>
+                <OrderSummary ingredients={ingredients}
+                              price={price}
+                              purchaseCanceled={() => setPurchasing(false)}
+                              purchaseContinued={() => alert('BUY!')}/>
             </Modal>
             <Burger ingredients={ingredients}/>
             <BuildControls
