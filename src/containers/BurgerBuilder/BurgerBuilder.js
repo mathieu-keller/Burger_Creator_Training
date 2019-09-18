@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Burger from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls.js';
 import Modal from '../../components/UI/Modal/Modal';
@@ -16,11 +16,17 @@ const INGREDIENT_PRICES = {
 
 const BurgerBuilder = () => {
     const basePrice = 4;
-    const [ingredients, setIngredients] = useState({});
+    const [ingredients, setIngredients] = useState(null);
     const [price, setPrice] = useState(basePrice);
     const [purchasable, setPurchasable] = useState(false);
     const [purchasing, setPurchasing] = useState(false);
     const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        axios.get('https://i-need-a-burger.firebaseio.com/ingredients.json')
+            .then(res => setIngredients(res.data))
+            .catch(console.log);
+    }, []);
 
     const updatePurchaseState = newIngredients => {
         const ingredientsCount = Object.keys(newIngredients)
@@ -71,26 +77,20 @@ const BurgerBuilder = () => {
             deliveryTime: 'fastest'
         };
         axios.post('/orders', order)
-            .then(console.log)
             .catch(console.log)
             .finally(() => {
                 setLoading(false);
                 setPurchasing(false);
             });
     };
-    let orderSummery = <OrderSummary ingredients={ingredients}
+    let burger = <Spinner/>;
+    let orderSummery = null;
+    if (ingredients) {
+        orderSummery = <OrderSummary ingredients={ingredients}
                                      price={price}
                                      purchaseCanceled={() => setPurchasing(false)}
                                      purchaseContinued={purchaseContinueHandler}/>;
-    if (loading) {
-        orderSummery = <Spinner/>
-    }
-
-    return (
-        <>
-            <Modal show={purchasing} modalClosed={() => setPurchasing(false)}>
-                {orderSummery}
-            </Modal>
+        burger = <>
             <Burger ingredients={ingredients}/>
             <BuildControls
                 price={price}
@@ -100,6 +100,19 @@ const BurgerBuilder = () => {
                 purchasable={purchasable}
                 ordered={() => setPurchasing(true)}
             />
+        </>;
+    }
+
+    if (loading) {
+        orderSummery = <Spinner/>
+    }
+
+    return (
+        <>
+            <Modal show={purchasing} modalClosed={() => setPurchasing(false)}>
+                {orderSummery}
+            </Modal>
+            {burger}
         </>
     );
 };
