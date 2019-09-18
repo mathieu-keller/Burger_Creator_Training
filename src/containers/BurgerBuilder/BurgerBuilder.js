@@ -3,6 +3,9 @@ import Burger from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls.js';
 import Modal from '../../components/UI/Modal/Modal';
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary'
+import axios from '../../axios-orders';
+import Spinner from "../../components/UI/Spinner/Spinner";
+import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler'
 
 const INGREDIENT_PRICES = {
     salad: 0.5,
@@ -17,6 +20,7 @@ const BurgerBuilder = () => {
     const [price, setPrice] = useState(basePrice);
     const [purchasable, setPurchasable] = useState(false);
     const [purchasing, setPurchasing] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const updatePurchaseState = newIngredients => {
         const ingredientsCount = Object.keys(newIngredients)
@@ -54,13 +58,38 @@ const BurgerBuilder = () => {
         updatePurchaseState(stateCopy);
     };
 
+    const purchaseContinueHandler = () => {
+        setLoading(true);
+        const order = {
+            ingredients,
+            price,
+            customer: {
+                lastName: 'Müller',
+                street: 'Neuer Jungfernstieg 20',
+                city: 'Hamburg'
+            },
+            deliveryTime: 'fastest'
+        };
+        axios.post('/orders', order)
+            .then(console.log)
+            .catch(console.log)
+            .finally(() => {
+                setLoading(false);
+                setPurchasing(false);
+            });
+    };
+    let orderSummery = <OrderSummary ingredients={ingredients}
+                                     price={price}
+                                     purchaseCanceled={() => setPurchasing(false)}
+                                     purchaseContinued={purchaseContinueHandler}/>;
+    if (loading) {
+        orderSummery = <Spinner/>
+    }
+
     return (
         <>
             <Modal show={purchasing} modalClosed={() => setPurchasing(false)}>
-                <OrderSummary ingredients={ingredients}
-                              price={price}
-                              purchaseCanceled={() => setPurchasing(false)}
-                              purchaseContinued={() => alert('BUY!')}/>
+                {orderSummery}
             </Modal>
             <Burger ingredients={ingredients}/>
             <BuildControls
@@ -75,4 +104,4 @@ const BurgerBuilder = () => {
     );
 };
 
-export default BurgerBuilder;
+export default withErrorHandler(BurgerBuilder, axios);

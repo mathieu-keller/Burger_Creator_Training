@@ -15,6 +15,6 @@ const modal = React.memo(({children, show, modalClosed}) => (
             {children}
         </div>
     </>
-), (prevProps, nextProps) => prevProps.show === nextProps.show);
+), (prevProps, nextProps) => prevProps.show === nextProps.show && prevProps.children === nextProps.children);
 
 export default modal;
