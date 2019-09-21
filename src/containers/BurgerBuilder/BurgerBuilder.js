@@ -20,7 +20,6 @@ const BurgerBuilder = props => {
     const [price, setPrice] = useState(basePrice);
     const [purchasable, setPurchasable] = useState(false);
     const [purchasing, setPurchasing] = useState(false);
-    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         axios.get('https://i-need-a-burger.firebaseio.com/ingredients.json')
@@ -65,27 +64,11 @@ const BurgerBuilder = props => {
     };
 
     const purchaseContinueHandler = () => {
-        /*setLoading(true);
-        const order = {
-            ingredients,
-            price,
-            customer: {
-                lastName: 'Müller',
-                street: 'Neuer Jungfernstieg 20',
-                city: 'Hamburg'
-            },
-            deliveryTime: 'fastest'
-        };
-        axios.post('/orders', order)
-            .catch(console.log)
-            .finally(() => {
-                setLoading(false);
-                setPurchasing(false);
-            });*/
         const queryParmas = [];
         for (let i in ingredients) {
             queryParmas.push(encodeURIComponent(i) + '=' + encodeURIComponent(ingredients[i]))
         }
+        queryParmas.push('price=' + price);
         props.history.push({
             pathname: '/checkout',
             search: '?' + queryParmas.join('&')
@@ -111,9 +94,6 @@ const BurgerBuilder = props => {
         </>;
     }
 
-    if (loading) {
-        orderSummery = <Spinner/>
-    }
 
     return (
         <>
