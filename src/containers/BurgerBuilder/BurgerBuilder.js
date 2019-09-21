@@ -14,7 +14,7 @@ const INGREDIENT_PRICES = {
     bacon: 0.7
 };
 
-const BurgerBuilder = () => {
+const BurgerBuilder = props => {
     const basePrice = 4;
     const [ingredients, setIngredients] = useState(null);
     const [price, setPrice] = useState(basePrice);
@@ -65,7 +65,7 @@ const BurgerBuilder = () => {
     };
 
     const purchaseContinueHandler = () => {
-        setLoading(true);
+        /*setLoading(true);
         const order = {
             ingredients,
             price,
@@ -81,7 +81,8 @@ const BurgerBuilder = () => {
             .finally(() => {
                 setLoading(false);
                 setPurchasing(false);
-            });
+            });*/
+        props.history.push('/checkout');
     };
     let burger = <Spinner/>;
     let orderSummery = null;
