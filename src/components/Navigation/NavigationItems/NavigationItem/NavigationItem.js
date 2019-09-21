@@ -1,13 +1,12 @@
 import React from 'react';
 import classes from './NavigationItem.module.sass'
+import {NavLink} from "react-router-dom";
 
 const navigationItem = ({link, active, children}) => (
     <li className={classes.NavigationItem}>
-        <a href={link}
-           className={active ? classes.active : null}
-        >
+        <NavLink to={link} activeClassName={classes.Active} exact>
             {children}
-        </a>
+        </NavLink>
     </li>
 );
 
