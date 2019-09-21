@@ -1,13 +1,17 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import CheckoutSummary from "../../components/Order/CheckoutSummary/CheckoutSummary";
 
 const Checkout = props => {
-    const [ingredients] = useState({
-        salad: 1,
-        meat: 1,
-        cheese: 1,
-        bacon: 1,
-    });
+    const [ingredients, setIngredients] = useState({});
+
+    useEffect(() => {
+        const query = new URLSearchParams(props.location.search);
+        const newIngredients = {};
+        for (let param of query.entries()) {
+            newIngredients[param[0]] = +param[1];
+        }
+        setIngredients(newIngredients);
+    }, [props.location.search]);
 
     const checkoutCancelledHandler = () => {
         props.history.goBack();

@@ -82,7 +82,14 @@ const BurgerBuilder = props => {
                 setLoading(false);
                 setPurchasing(false);
             });*/
-        props.history.push('/checkout');
+        const queryParmas = [];
+        for (let i in ingredients) {
+            queryParmas.push(encodeURIComponent(i) + '=' + encodeURIComponent(ingredients[i]))
+        }
+        props.history.push({
+            pathname: '/checkout',
+            search: '?' + queryParmas.join('&')
+        });
     };
     let burger = <Spinner/>;
     let orderSummery = null;
