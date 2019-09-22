@@ -7,17 +7,10 @@ import axios from '../../axios-orders';
 import Spinner from "../../components/UI/Spinner/Spinner";
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler'
 import {connect} from "react-redux";
-import {ADD_INGREDIENTS, DEL_INGREDIENTS, SET_INGREDIENTS, SET_PRICE} from "../../store/reducer";
+import {ADD_INGREDIENTS, DEL_INGREDIENTS, SET_INGREDIENTS} from "../../store/reducer";
 
-const INGREDIENT_PRICES = {
-    salad: 0.5,
-    cheese: 0.4,
-    meat: 1.3,
-    bacon: 0.7
-};
 
 const BurgerBuilder = props => {
-    const basePrice = 4;
     const [purchasable, setPurchasable] = useState(false);
     const [purchasing, setPurchasing] = useState(false);
     const [request, setRequest] = useState(false);
@@ -30,7 +23,7 @@ const BurgerBuilder = props => {
                     updatePurchaseState();
                 })
                 .catch(console.log)
-                .finally(()=>setRequest(true));
+                .finally(() => setRequest(true));
         }
     });
 
@@ -43,21 +36,11 @@ const BurgerBuilder = props => {
 
     const addIngredientHandler = type => {
         props.addIngredients(type);
-        props.setPrice(props.price + INGREDIENT_PRICES[type]);
         updatePurchaseState(props.ingredients);
     };
 
     const removeIngredientHandler = type => {
-        const oldCount = props.ingredients[type] ? props.ingredients[type] : 0;
-        const newCount = oldCount - 1 > 0 ? oldCount - 1 : 0;
         props.delIngredients(type);
-        if (oldCount !== newCount) {
-            let newPrice = props.price - INGREDIENT_PRICES[type];
-            if (newPrice < basePrice) {
-                newPrice = basePrice;
-            }
-            props.setPrice(newPrice);
-        }
         updatePurchaseState();
     };
 
@@ -97,7 +80,6 @@ const BurgerBuilder = props => {
 
 const actionMapToProps = dispatch => ({
     setIngredients: ingredients => dispatch({type: SET_INGREDIENTS, payload: ingredients}),
-    setPrice: price => dispatch({type: SET_PRICE, payload: price}),
     addIngredients: ingredient => dispatch({type: ADD_INGREDIENTS, payload: ingredient}),
     delIngredients: ingredient => dispatch({type: DEL_INGREDIENTS, payload: ingredient}),
 });
