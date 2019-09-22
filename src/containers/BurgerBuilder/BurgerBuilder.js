@@ -23,7 +23,10 @@ const BurgerBuilder = props => {
 
     useEffect(() => {
         axios.get('https://i-need-a-burger.firebaseio.com/ingredients.json')
-            .then(res => setIngredients(res.data))
+            .then(res => {
+                setIngredients(res.data);
+                updatePurchaseState(res.data);
+            })
             .catch(console.log);
     }, []);
 

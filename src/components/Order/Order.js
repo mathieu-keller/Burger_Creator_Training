@@ -1,5 +1,6 @@
 import React from 'react';
 import classes from './Order.module.sass'
+import Burger from "../Burger/Burger";
 
 const Order = ({ingredients, price}) => {
     const ingredientsOutput = Object.keys(ingredients).map(key => (
@@ -15,6 +16,7 @@ const Order = ({ingredients, price}) => {
     return (
         <div className={classes.Order}>
             <p>Ingredients:{ingredientsOutput}</p>
+            <Burger ingredients={ingredients} style={{height: '200px', width:'200px'}} />
             <p>Price: <strong>{Number.parseFloat(price).toFixed(2)} €</strong></p>
         </div>
     )

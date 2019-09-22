@@ -130,10 +130,11 @@ const ContactData = props => {
 
     const formInput = Object.keys(orderFrom).map(key => <Input key={key} {...orderFrom[key]}
                                                                changed={e => inputChangedHandler(e, key)}/>);
+    const disableOrderButton = !formIsValid || !props.ingredients || Object.keys(props.ingredients).length <= 0;
     let form = (
         <form>
             {formInput}
-            <Button type='Success' clicked={orderHandler} disabled={!formIsValid}>ORDER</Button>
+            <Button type='Success' clicked={orderHandler} disabled={disableOrderButton}>ORDER</Button>
         </form>
     );
     if (loading) {

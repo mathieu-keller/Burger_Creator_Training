@@ -2,7 +2,7 @@ import React from 'react';
 import Burger from "../../Burger/Burger";
 import Button from '../../UI/Button/Button'
 import classes from './CheckoutSummary.module.sass'
-import {withRouter} from "react-router-dom";
+import {Route, withRouter} from "react-router-dom";
 
 const CheckoutSummary = props => (
     <div className={classes.CheckoutSummary}>
@@ -10,16 +10,24 @@ const CheckoutSummary = props => (
         <div style={{width: '100%', margin: 'auto'}}>
             <Burger ingredients={props.ingredients}/>
         </div>
-        <Button
-            type='Danger'
-            clicked={props.checkoutCancelledHandler}
-        >CANCEL
-        </Button>
-        <Button
-            type='Success'
-            clicked={props.checkoutContinuedHandler}
-        >CONTINUE
-        </Button>
+        <Route
+            path={props.match.path}
+            exact
+            render={() => (
+                <><Button
+                    type='Danger'
+                    clicked={props.checkoutCancelledHandler}
+                >CANCEL
+                </Button>
+                    <Button
+                        type='Success'
+                        clicked={props.checkoutContinuedHandler}
+                        disabled={!props.ingredients || Object.keys(props.ingredients).length <= 0}
+                    >CONTINUE
+                    </Button>
+                </>)}
+        />
+
     </div>
 );
 

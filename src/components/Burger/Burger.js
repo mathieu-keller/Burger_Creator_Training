@@ -14,8 +14,8 @@ const getIngredients = ingredients => {
     return transformedIngredients;
 };
 
-const burger = ({ingredients}) => (
-    <div className={classes.Burger}>
+const burger = ({ingredients,style}) => (
+    <div className={classes.Burger} style={style}>
         <BurgerIngredient type='bread-top'/>
         {getIngredients(ingredients)}
         <BurgerIngredient type='bread-bottom'/>
