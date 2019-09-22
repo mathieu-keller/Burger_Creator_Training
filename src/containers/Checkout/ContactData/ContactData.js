@@ -4,28 +4,94 @@ import classes from "./ContactData.module.sass"
 import axios from '../../../axios-orders';
 import Spinner from "../../../components/UI/Spinner/Spinner";
 import {withRouter} from "react-router-dom";
+import Input from "../../../components/UI/Input/Input";
 
 const ContactData = props => {
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [address, setAddress] = useState({
-        street: '',
-        postalCode: ''
+    const [orderFrom, setOrderFrom] = useState({
+        name: {
+            elementType: 'input',
+            elementConfig: {
+                type: 'text',
+                placeholder: 'Your Name'
+            },
+            value: '',
+            validation: {
+                required: true,
+            },
+            valid: false
+        },
+        street: {
+            elementType: 'input',
+            elementConfig: {
+                type: 'text',
+                placeholder: 'Your Street'
+            },
+            value: '',
+            validation: {
+                required: true,
+            },
+            valid: false
+        },
+        city: {
+            elementType: 'input',
+            elementConfig: {
+                type: 'text',
+                placeholder: 'Your City'
+            },
+            value: '',
+            validation: {
+                required: true,
+            },
+            valid: false
+        },
+        zipCode: {
+            elementType: 'input',
+            elementConfig: {
+                type: 'text',
+                placeholder: 'Your Zipcode'
+            },
+            value: '',
+            validation: {
+                required: true,
+                minLength: 5,
+                maxLength: 5,
+            },
+            valid: false
+        },
+        email: {
+            elementType: 'input',
+            elementConfig: {
+                type: 'email',
+                placeholder: 'Your Email'
+            },
+            value: '',
+            validation: {
+                required: true,
+            },
+            valid: false
+        },
+        deliveryMethod: {
+            elementType: 'select',
+            elementConfig: {
+                options: [{value: 'fastest', displayValue: 'Fastest'},
+                    {value: 'cheapest', displayValue: 'Cheapest'},]
+            },
+            value: 'fastest',
+            validation: {},
+            valid: true
+        }
     });
     const [loading, setLoading] = useState(false);
-
+    const [formIsValid, setFormIsValid] = useState(false);
     const orderHandler = e => {
         e.preventDefault();
         setLoading(true);
+        const formData = {};
+        Object.keys(orderFrom).map(key => formData[key] = orderFrom[key].value);
         const order = {
             ingredients: props.ingredients,
             price: props.price,
-            customer: {
-                lastName: 'Müller',
-                street: 'Neuer Jungfernstieg 20',
-                city: 'Hamburg'
-            },
-            deliveryTime: 'fastest'
+            orderData: formData
         };
         axios.post('/orders.json', order)
             .then(() => props.history.push('/'))
@@ -33,16 +99,41 @@ const ContactData = props => {
                 setLoading(false);
                 console.log(e);
             });
-        console.log(props.ingredients)
     };
 
+    const checkValidity = (value, rules) => {
+        let valid = true;
+        if (rules.required && value.trim() === '') {
+            valid = value.trim() !== '' && valid;
+        }
+        if (rules.minLength) {
+            valid = value.length >= rules.minLength && value.replace(/\s+/g, '').length >= rules.minLength && valid;
+        }
+        if (rules.maxLength) {
+            valid = value.length <= rules.maxLength && value.replace(/\s+/g, '').length <= rules.maxLength && valid;
+        }
+        return valid;
+    };
+
+    const inputChangedHandler = (e, inputId) => {
+        const updatedOrderForm = {...orderFrom};
+        const updatedOrderFormElement = {...updatedOrderForm[inputId]};
+        updatedOrderFormElement.value = e.target.value;
+        updatedOrderFormElement.valid = checkValidity(e.target.value, updatedOrderFormElement.validation);
+        updatedOrderFormElement.toched = true;
+        updatedOrderForm[inputId] = updatedOrderFormElement;
+        setOrderFrom(updatedOrderForm);
+        let isValid = true;
+        Object.values(updatedOrderForm).map(form => isValid = form.valid && isValid);
+        setFormIsValid(isValid);
+    };
+
+    const formInput = Object.keys(orderFrom).map(key => <Input key={key} {...orderFrom[key]}
+                                                               changed={e => inputChangedHandler(e, key)}/>);
     let form = (
         <form>
-            <input className={classes.Input} type='text' name='name' placeholder='Your name'/>
-            <input className={classes.Input} type='email' name='email' placeholder='Your email'/>
-            <input className={classes.Input} type='text' name='street' placeholder='Your street'/>
-            <input className={classes.Input} type='text' name='postal' placeholder='Your postal code'/>
-            <Button type='Success' clicked={orderHandler}>ORDER</Button>
+            {formInput}
+            <Button type='Success' clicked={orderHandler} disabled={!formIsValid}>ORDER</Button>
         </form>
     );
     if (loading) {
