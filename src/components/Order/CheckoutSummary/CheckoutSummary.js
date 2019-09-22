@@ -10,6 +10,7 @@ const CheckoutSummary = props => (
         <div style={{width: '100%', margin: 'auto'}}>
             <Burger ingredients={props.ingredients}/>
         </div>
+        <p>Price: <strong>{props.price.toFixed(2)}€</strong></p>
         <Route
             path={props.match.path}
             exact

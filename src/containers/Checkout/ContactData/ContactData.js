@@ -5,6 +5,7 @@ import axios from '../../../axios-orders';
 import Spinner from "../../../components/UI/Spinner/Spinner";
 import {withRouter} from "react-router-dom";
 import Input from "../../../components/UI/Input/Input";
+import {connect} from "react-redux";
 
 const ContactData = props => {
     const [orderFrom, setOrderFrom] = useState({
@@ -149,4 +150,8 @@ const ContactData = props => {
     );
 };
 
-export default withRouter(ContactData);
+const stateMapToProps = state => ({
+    ingredients: state.ingredients,
+});
+
+export default withRouter(connect(stateMapToProps)(ContactData));
