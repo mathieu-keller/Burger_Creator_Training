@@ -22,7 +22,6 @@ const BurgerBuilder = props => {
                     props.setIngredients(res.data);
                     updatePurchaseState();
                 })
-                .catch(console.log)
                 .finally(() => setRequest(true));
         }
     });

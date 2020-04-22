@@ -10,18 +10,14 @@ const Orders = () => {
     useEffect(() => {
         setLoading(true);
         axios.get('/orders.json')
-            .then(res => {
-                console.log(res);
-                setOrders(res.data);
-            })
-            .catch(console.log)
+            .then(res => setOrders(res.data))
             .finally(() => setLoading(false));
     }, []);
 
     let ordersArray = <Spinner/>;
 
     if (!loading) {
-        if(orders) {
+        if (orders) {
             ordersArray = Object.keys(orders)
                 .map(key => (<Order
                         key={key}

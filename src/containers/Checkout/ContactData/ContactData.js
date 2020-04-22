@@ -96,10 +96,7 @@ const ContactData = props => {
         };
         axios.post('/orders.json', order)
             .then(() => props.history.push('/'))
-            .catch(e => {
-                setLoading(false);
-                console.log(e);
-            });
+            .finally(() => setLoading(false));
     };
 
     const checkValidity = (value, rules) => {
