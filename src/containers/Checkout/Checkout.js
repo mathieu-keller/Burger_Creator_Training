@@ -1,18 +1,20 @@
-import React from 'react';
+import React, {useState} from 'react';
 import CheckoutSummary from "../../components/Order/CheckoutSummary/CheckoutSummary";
 import ContactData from "./ContactData/ContactData";
 import {connect} from "react-redux";
-import {Route} from "react-router-dom";
+import {useLocation, useNavigate} from 'react-router-dom';
 
 const Checkout = props => {
+  const [showContractData,setShowContractData] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
     const checkoutCancelledHandler = () => {
-        props.history.goBack();
+      navigate(-1);
     };
-
     const checkoutContinuedHandler = () => {
-        props.history.replace('/checkout/contact-data');
+      setShowContractData(true);
     };
-
+    if(location === undefined) return <></>;
     return (
         <div>
             <CheckoutSummary
@@ -21,10 +23,7 @@ const Checkout = props => {
                 checkoutCancelledHandler={checkoutCancelledHandler}
                 checkoutContinuedHandler={checkoutContinuedHandler}
             />
-            <Route
-                path={props.match.path + '/contact-data'}
-                render={() => (<ContactData price={props.price}/>)}
-            />
+          {showContractData?<ContactData price={props.price}/>:null}
         </div>);
 };
 

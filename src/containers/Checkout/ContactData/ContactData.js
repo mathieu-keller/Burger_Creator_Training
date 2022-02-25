@@ -3,9 +3,9 @@ import Button from "../../../components/UI/Button/Button";
 import classes from "./ContactData.module.sass"
 import axios from '../../../axios-orders';
 import Spinner from "../../../components/UI/Spinner/Spinner";
-import {withRouter} from "react-router-dom";
 import Input from "../../../components/UI/Input/Input";
 import {connect} from "react-redux";
+import {useNavigate} from 'react-router-dom';
 
 const ContactData = props => {
     const [orderFrom, setOrderFrom] = useState({
@@ -84,6 +84,8 @@ const ContactData = props => {
     });
     const [loading, setLoading] = useState(false);
     const [formIsValid, setFormIsValid] = useState(false);
+    const navigate = useNavigate();
+
     const orderHandler = e => {
         e.preventDefault();
         setLoading(true);
@@ -95,8 +97,8 @@ const ContactData = props => {
             orderData: formData
         };
         axios.post('/orders.json', order)
-            .then(() => props.history.push('/'))
-            .finally(() => setLoading(false));
+            .then(() => navigate('/'))
+            .catch(() => setLoading(false));
     };
 
     const checkValidity = (value, rules) => {
@@ -151,4 +153,4 @@ const stateMapToProps = state => ({
     ingredients: state.ingredients,
 });
 
-export default withRouter(connect(stateMapToProps)(ContactData));
+export default connect(stateMapToProps)(ContactData);

@@ -8,13 +8,14 @@ import Spinner from "../../components/UI/Spinner/Spinner";
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler'
 import {connect} from "react-redux";
 import {ADD_INGREDIENTS, DEL_INGREDIENTS, SET_INGREDIENTS} from "../../store/reducer";
+import {useNavigate} from 'react-router-dom';
 
 
 const BurgerBuilder = props => {
     const [purchasable, setPurchasable] = useState(false);
     const [purchasing, setPurchasing] = useState(false);
     const [request, setRequest] = useState(false);
-
+    const navigate = useNavigate();
     useEffect(() => {
         if (!request) {
             axios.get('https://i-need-a-burger.firebaseio.com/ingredients.json')
@@ -44,7 +45,7 @@ const BurgerBuilder = props => {
     };
 
     const purchaseContinueHandler = () => {
-        props.history.push('/checkout');
+        navigate('/checkout');
     };
     let burger = <Spinner/>;
     let orderSummery = null;
